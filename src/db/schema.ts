@@ -18,6 +18,7 @@ export const polls = pgTable("polls", {
   id: uuid("id").primaryKey().defaultRandom(),
   slug: varchar("slug", { length: 24 })
     .unique()
+    .notNull()
     .$defaultFn(() => createId()),
   name: varchar("name", { length: 256 }).notNull().default(""),
   description: text("description").notNull().default(""),

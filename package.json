@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "drizzle-kit generate:pg"
+    "migrate": "drizzle-kit generate:pg",
+    "push": "drizzle-kit push:pg"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
@@ -19,6 +20,7 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.2.0",
     "drizzle-orm": "^0.29.3",
+    "drizzle-zod": "^0.5.1",
     "next": "14.1.0",
     "postgres": "^3.4.3",
     "react": "^18",

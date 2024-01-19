@@ -17,6 +17,7 @@
     "@trpc/react-query": "11.0.0-next-beta.221",
     "@trpc/server": "11.0.0-next-beta.221",
     "clsx": "^2.1.0",
+    "date-fns": "^3.2.0",
     "drizzle-orm": "^0.29.3",
     "next": "14.1.0",
     "postgres": "^3.4.3",

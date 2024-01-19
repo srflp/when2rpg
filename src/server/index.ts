@@ -1,16 +1,6 @@
+import { db } from "@/db";
 import { procedure, router } from "./trpc";
-
-import { env } from "@/env";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { polls } from "@/db/schema";
-import { z } from "zod";
-
-const client = postgres(env.CONNECTION_STRING, { prepare: false });
-const db = drizzle(client);
-
-migrate(db, { migrationsFolder: "drizzle" });
 
 export const appRouter = router({
   getHello: procedure.query(async () => {

@@ -1,4 +1,4 @@
-import { publicProcedure, router } from "./trpc";
+import { procedure, router } from "./trpc";
 
 import { env } from "@/env";
 import { drizzle } from "drizzle-orm/postgres-js";
@@ -13,10 +13,10 @@ const db = drizzle(client);
 migrate(db, { migrationsFolder: "drizzle" });
 
 export const appRouter = router({
-  getHello: publicProcedure.query(async () => {
+  getHello: procedure.query(async () => {
     return await db.select().from(polls);
   }),
-  createPoll: publicProcedure.mutation(async () => {
+  createPoll: procedure.mutation(async () => {
     const [poll] = await db
       .insert(polls)
       .values({})

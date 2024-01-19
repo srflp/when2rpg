@@ -1,0 +1,39 @@
+<svg width="90mm" height="40mm" viewBox="0 0 90 40" xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg">
+   <defs>
+      <linearGradient id="prefix__b">
+         <stop offset="1" />
+         <stop offset="1" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient id="prefix__a">
+         <stop offset="1" />
+         <stop offset="1" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient xlink:href="#prefix__a" id="prefix__e" gradientUnits="userSpaceOnUse" x1="75.784" y1="144.48"
+         x2="78.282" y2="144.48" gradientTransform="translate(-90.305 -50.15)" />
+      <linearGradient xlink:href="#prefix__b" id="prefix__d" gradientUnits="userSpaceOnUse" x1="75.784" y1="144.48"
+         x2="78.282" y2="144.48" gradientTransform="translate(-90.305 -50.15)" />
+      <path id="prefix__c" d="M205.873 131.116h142.993v36.098H205.873z" />
+   </defs>
+   <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      d="M3.502 5.524h48.123v29.582H3.502z" />
+   <g stroke="#000" stroke-linecap="round" stroke-linejoin="round"><text
+         transform="matrix(.30526 0 0 .30526 -53.798 -32.958)" font-size="30.236" fill="none" stroke-width="1.89">
+         <tspan x="205.873" y="159.235">
+            <tspan style="-inkscape-font-specification:Lato" font-family="Lato" fill="#000">WHEN 2</tspan>
+         </tspan>
+      </text><text x="8.136" y="31.328" font-size="19.721" stroke-width="1.233">
+         <tspan style="-inkscape-font-specification:Lato" x="8.136" y="31.328" font-weight="400" font-family="Lato">RPG
+         </tspan>
+      </text></g>
+   <g transform="matrix(.52301 0 0 .52301 78.886 -28.798)" stroke-linecap="round" stroke-linejoin="round">
+      <g opacity=".207" stroke="#000">
+         <path
+            d="M-13.272 106.027l-10.28-17.807H-2.99zM-13.265 67.236l-10.281 17.808h20.562zM.052 89.855l-10.282 17.807h20.563zM-26.284 90.079l-10.281 17.807h20.562zM-28.132 87.69l-10.783 17.869V82.945zM-14.493 122.05l-21.628-11.522h21.69zM-11.74 122.075l21.627-11.522h-21.69zM-26.72 84.474l11.014-17.84-21.76 13.507zM1.399 87.572l10.783 17.87V82.826zM-.012 84.357l-11.015-17.841 21.76 13.507z" />
+      </g>
+      <circle cx="-13.272" cy="94.33" r="29.105" fill="none" stroke="#000" stroke-width="3.824" />
+      <circle cx="-13.271" cy="94.329" r=".749" fill="url(#prefix__d)" stroke="url(#prefix__e)" stroke-width=".956" />
+      <path d="M-13.287 71.109V90.68" stroke="#000" stroke-width="1.912" />
+      <path d="M3.425 94.38H-8.926" stroke="#000" stroke-width="2.868" />
+   </g>
+</svg>

@@ -6,7 +6,9 @@ export default function Home() {
   const createPoll = trpc.createPoll.useMutation();
   const router = useRouter();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-center gap-10 py-12 md:p-12 h-full">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.svg" alt="logo" width="340" />
       <button
         className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 px-8 bg-amber-700 text-white"
         onClick={async () => {
@@ -32,7 +34,7 @@ export default function Home() {
             />
           </svg>
         )}
-        {createPoll.isPending ? "Tworzenie..." : "Nowa ankieta"}
+        {createPoll.isPending ? "Tworzenie..." : "Stwórz ankietę"}
       </button>
     </main>
   );

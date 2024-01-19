@@ -1,0 +1,45 @@
+<svg width="40mm" height="40mm" viewBox="0 0 40 40" xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg">
+   <defs>
+      <style>
+         .a {
+            fill: #000;
+            stroke: #000;
+         }
+
+         @media (prefers-color-scheme:dark) {
+            .a {
+               fill: #fff;
+               stroke: #fff;
+            }
+         }
+      </style>
+      <linearGradient id="prefix__b">
+         <stop offset="1" />
+         <stop offset="1" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient id="prefix__a">
+         <stop offset="1" />
+         <stop offset="1" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient xlink:href="#prefix__a" id="prefix__d" gradientUnits="userSpaceOnUse" x1="75.784" y1="144.48"
+         x2="78.282" y2="144.48" gradientTransform="matrix(.98629 0 0 .98629 -188.567 -49.198)" />
+      <linearGradient xlink:href="#prefix__b" id="prefix__c" gradientUnits="userSpaceOnUse" x1="75.784" y1="144.48"
+         x2="78.282" y2="144.48" gradientTransform="matrix(.98629 0 0 .98629 -188.567 -49.198)" />
+   </defs>
+   <g class="a" transform="matrix(.52301 0 0 .52301 78.886 -28.798)" stroke-linecap="round" stroke-linejoin="round">
+      <g opacity=".207">
+         <path d="M68.493 109.296L58.212 91.488h20.562z" transform="matrix(.98629 0 0 .98629 -180.144 -2.959)" />
+         <path d="M68.493 109.296L58.212 91.488h20.562z" transform="matrix(.98629 0 0 -.98629 -180.138 174.376)" />
+         <path d="M68.493 109.296L58.212 91.488h20.562z" transform="matrix(.98629 0 0 -.98629 -167.004 196.685)" />
+         <path d="M68.493 109.296L58.212 91.488h20.562z" transform="matrix(.98629 0 0 -.98629 -192.978 196.905)" />
+         <path
+            d="M-127.247 86.752l-10.635 17.624V82.072zM-113.795 120.641l-21.331-11.364h21.392zM-111.08 120.666l21.33-11.364h-21.391zM-125.855 83.58l10.864-17.596-21.462 13.323zM-98.121 86.636l10.635 17.624V81.956zM-99.513 83.465l-10.864-17.596 21.462 13.322z"
+            stroke-width=".986" />
+      </g>
+      <circle cx="-112.591" cy="93.301" fill="none" stroke-width="3.772" r="28.706" />
+      <circle cx="-112.59" cy="93.301" stroke-width=".943" r=".739" />
+      <path d="M-112.606 70.398v19.304" stroke-width="1.886" />
+      <path d="M-96.123 93.35h-12.182" stroke-width="2.829" />
+   </g>
+</svg>

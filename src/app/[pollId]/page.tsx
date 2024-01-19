@@ -7,7 +7,7 @@ export default function Page({
 }) {
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      <h1 className="text-2xl">when2rpg - pool (id: {pollId})</h1>
+      <h1 className="text-2xl">when2rpg - poll (id: {pollId})</h1>
       <Table />
     </main>
   );

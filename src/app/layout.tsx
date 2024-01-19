@@ -19,13 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn(inter.className, "max-w-screen-xl mx-auto px-12 py-10")}
+        className={cn(
+          inter.className,
+          "max-w-screen-xl mx-auto px-12 py-10 h-screen",
+        )}
       >
-        <Provider>
-          <h1 className="font-semibold text-2xl">when2rpg</h1>
-          <p>Tutaj opis</p>
-          {children}
-        </Provider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

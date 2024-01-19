@@ -18,12 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={cn(
-          inter.className,
-          "max-w-screen-xl mx-auto px-12 py-10 h-screen",
-        )}
-      >
+      <body className={cn(inter.className)}>
         <Provider>{children}</Provider>
       </body>
     </html>

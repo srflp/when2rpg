@@ -1,7 +1,6 @@
 "use client";
 import { trpc } from "../_trpc/client";
 import { addDays, format, setDefaultOptions } from "date-fns";
-
 import { Meta } from "./_components/Meta";
 import { NewAttendee } from "./_components/NewAttendee";
 import { AvailabilityIcon } from "./_components/AvailabilityIcon";
@@ -22,13 +21,12 @@ export default function Page({
   params: { slug: string };
 }) {
   const { data: poll } = trpc.poll.get.useQuery({ slug });
-  console.log(poll);
-
   const today = new Date();
   const next30Days = Array.from({ length: 30 }, (v, i) => {
     const date = addDays(today, i);
     return {
-      date: format(date, "dd.MM.yyyy"),
+      date: format(date, "yyyy-MM-dd"),
+      dateFormatted: format(date, "dd.MM.yyyy"),
       weekday: format(date, "EEEE"),
     };
   });
@@ -109,37 +107,47 @@ export default function Page({
               <NewAttendee slug={slug} pollId={poll.id} />
             </div>
           )}
-          {next30Days.map(({ date, weekday }, i) => (
+          {next30Days.map(({ date, dateFormatted, weekday }, i) => (
             <Fragment key={date}>
               <div className="px-2 py-1.5">
                 {weekday}
                 <br />
-                {date}
+                {dateFormatted}
               </div>
-              {poll?.attendees.map((attendee) => (
-                <div
-                  key={attendee.id}
-                  onClick={() =>
-                    !isPollEditMode &&
-                    setSelectedAttendee((currentId) =>
-                      currentId === attendee.id ? "" : attendee.id,
-                    )
-                  }
-                  className={cn(
-                    "cursor-pointer flex flex-col justify-center items-center",
-                    !isPollEditMode &&
-                      selectedAttendee === attendee.id &&
-                      "bg-zinc-100",
-                    i === 29 && "rounded-b-2xl",
-                  )}
-                >
-                  {selectedAttendee === attendee.id ? (
-                    <AvailabilityPicker />
-                  ) : (
-                    <AvailabilityIcon status="yes" />
-                  )}
-                </div>
-              ))}
+              {poll?.attendees.map((attendee) => {
+                const status = attendee.availabilities.find(
+                  (a) => a.date === date,
+                )?.status;
+                return (
+                  <div
+                    key={attendee.id}
+                    onClick={() =>
+                      !isPollEditMode &&
+                      setSelectedAttendee((currentId) =>
+                        currentId === attendee.id ? "" : attendee.id,
+                      )
+                    }
+                    className={cn(
+                      "cursor-pointer flex flex-col justify-center items-center",
+                      !isPollEditMode &&
+                        selectedAttendee === attendee.id &&
+                        "bg-zinc-100",
+                      i === 29 && "rounded-b-2xl",
+                    )}
+                  >
+                    {selectedAttendee === attendee.id ? (
+                      <AvailabilityPicker
+                        slug={slug}
+                        attendeeId={attendee.id}
+                        date={date}
+                        status={status}
+                      />
+                    ) : (
+                      <AvailabilityIcon status={status} />
+                    )}
+                  </div>
+                );
+              })}
               {poll && isPollEditMode && <div></div>}
             </Fragment>
           ))}

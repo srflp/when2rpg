@@ -42,6 +42,11 @@ export const appRouter = router({
                 },
                 with: {
                   availabilities: {
+                    columns: {
+                      description: false,
+                      id: false,
+                      attendeeId: false,
+                    },
                     where: gte(availabilities.date, sql`CURRENT_DATE`),
                   },
                 },
@@ -93,38 +98,24 @@ export const appRouter = router({
       }),
   }),
   availability: router({
-    // list: procedure
-    //   .input(z.object({ pollId: z.string() }))
-    //   .query(async ({ input }) => {
-    //     const toPostgresDate = (date: Date) => format(date, "yyyy-MM-dd");
-    //     const todayDate = new Date();
-    //     const today = toPostgresDate(todayDate);
-    //     const dateIn30Days = toPostgresDate(addDays(todayDate, 30));
-    //     return await db
-    //       .select()
-    //       .from(availabilities)
-    //       .where(
-    //         and(
-    //           eq(availabilities.pollId, input.pollId),
-    //           between(availabilities.date, today, dateIn30Days),
-    //         ),
-    //       );
-    //   }),
     set: procedure
       .input(
         z.object({
           date: z.string(),
           attendeeId: z.string(),
-          availability: z.enum(["yes", "no", "maybe"]),
+          status: z.enum(["yes", "no", "maybe"]),
         }),
       )
-      .mutation(async ({ input }) => {
-        const [availability] = await db
-          .insert(availabilities)
-          .values(input)
-          .returning();
-        return availability;
-      }),
+      .mutation(
+        async ({ input }) =>
+          await db
+            .insert(availabilities)
+            .values(input)
+            .onConflictDoUpdate({
+              target: [availabilities.date, availabilities.attendeeId],
+              set: { status: input.status },
+            }),
+      ),
   }),
 });
 

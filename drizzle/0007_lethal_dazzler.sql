@@ -1,0 +1,1 @@
+ALTER TABLE "availabilities" ALTER COLUMN "status" SET NOT NULL;

@@ -50,6 +50,13 @@
       "when": 1705782681553,
       "tag": "0006_adorable_black_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1705789575758,
+      "tag": "0007_lethal_dazzler",
+      "breakpoints": true
     }
   ]
 }

@@ -51,7 +51,7 @@ export const availabilities = pgTable(
     }),
     date: date("date").notNull(),
     description: text("description").notNull().default(""),
-    status: availabilityStatusEnum("status"),
+    status: availabilityStatusEnum("status").notNull(),
   },
   (t) => ({
     uniqueDateAndAttendee: unique().on(t.date, t.attendeeId),

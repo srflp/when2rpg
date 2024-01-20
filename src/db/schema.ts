@@ -8,11 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { createId } from "@paralleldrive/cuid2";
 
-export const availabilityStatusEnum = pgEnum("status", [
-  "yes",
-  "unclear",
-  "no",
-]);
+export const availabilityStatusEnum = pgEnum("status", ["yes", "maybe", "no"]);
 
 export const polls = pgTable("polls", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -28,14 +24,18 @@ export const attendees = pgTable("attendees", {
   id: uuid("id").primaryKey().defaultRandom(),
   pollId: uuid("poll_id")
     .notNull()
-    .references(() => polls.id),
+    .references(() => polls.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 256 }).notNull().default(""),
 });
 
 export const availabilities = pgTable("availabilities", {
   id: uuid("id").primaryKey().defaultRandom(),
-  pollId: uuid("poll_id").references(() => polls.id),
-  userId: uuid("user_id").references(() => attendees.id),
+  pollId: uuid("poll_id").references(() => polls.id, {
+    onDelete: "cascade",
+  }),
+  userId: uuid("user_id").references(() => attendees.id, {
+    onDelete: "cascade",
+  }),
   date: date("date").notNull(),
   description: text("description").notNull().default(""),
   status: availabilityStatusEnum("status"),

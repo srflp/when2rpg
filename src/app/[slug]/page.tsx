@@ -1,10 +1,13 @@
 "use client";
 import { trpc } from "../_trpc/client";
-import { addDays, format } from "date-fns";
+import { addDays, format, setDefaultOptions } from "date-fns";
 
 import { Meta } from "./_components/Meta";
 import { NewAttendee } from "./_components/NewAttendee";
 import { AttendeeHeader } from "./_components/AttendeeHeader";
+import { AvailabilityIcon } from "./_components/AvailabilityIcon";
+import { pl } from "date-fns/locale";
+setDefaultOptions({ locale: pl });
 
 export default function Page({
   params: { slug },
@@ -19,7 +22,11 @@ export default function Page({
 
   const today = new Date();
   const next30Days = Array.from({ length: 30 }, (v, i) => {
-    return format(addDays(today, i), "dd.MM.yyyy");
+    const date = addDays(today, i);
+    return {
+      date: format(date, "dd.MM.yyyy"),
+      weekday: format(date, "EEEE"),
+    };
   });
   return (
     <main className="flex flex-col justify-between p-6 md:p-12 max-w-screen-2xl mx-auto gap-8 items-start">
@@ -31,7 +38,7 @@ export default function Page({
       <table>
         <thead>
           <tr className="*:px-1">
-            <th className="text-left align-bottom">Data</th>
+            <th className="align-bottom">Data</th>
             {attendees?.map((attendee) => (
               <th key={attendee.id} className="align-bottom">
                 <AttendeeHeader attendee={attendee} />
@@ -42,11 +49,19 @@ export default function Page({
             </th>
           </tr>
         </thead>
-        <tbody className="flex flex-col gap-4">
-          {next30Days.map((day) => (
-            <tr key={day}>
-              <td className="">{day}</td>
-              <td></td>
+        <tbody className="text-center">
+          {next30Days.map(({ date, weekday }) => (
+            <tr key={date}>
+              <td>
+                {weekday}
+                <br />
+                {date}
+              </td>
+              {attendees?.map((attendee) => (
+                <td key={attendee.id}>
+                  <AvailabilityIcon status={null} />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

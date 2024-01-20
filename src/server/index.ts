@@ -1,8 +1,10 @@
+import { addDays, format } from "date-fns";
+import { availabilities } from "./../db/schema";
 import { db } from "@/db";
 import { procedure, router } from "./trpc";
 import { attendees, polls } from "@/db/schema";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
+import { eq, and, between } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
@@ -83,6 +85,25 @@ export const appRouter = router({
           .where(eq(attendees.id, input.id))
           .returning();
         return attendee;
+      }),
+  }),
+  availability: router({
+    list: procedure
+      .input(z.object({ pollId: z.string() }))
+      .query(async ({ input }) => {
+        const toPostgresDate = (date: Date) => format(date, "yyyy-MM-dd");
+        const todayDate = new Date();
+        const today = toPostgresDate(todayDate);
+        const dateIn30Days = toPostgresDate(addDays(todayDate, 30));
+        return await db
+          .select()
+          .from(availabilities)
+          .where(
+            and(
+              eq(availabilities.pollId, input.pollId),
+              between(availabilities.date, today, dateIn30Days),
+            ),
+          );
       }),
   }),
 });

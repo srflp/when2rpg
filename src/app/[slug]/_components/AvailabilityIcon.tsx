@@ -1,0 +1,22 @@
+import { RouterOutput } from "@/app/_trpc/client";
+import { FC } from "react";
+import CheckIcon from "@mui/icons-material/Check";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import CloseIcon from "@mui/icons-material/Close";
+import RemoveIcon from "@mui/icons-material/Remove";
+
+interface Props {
+  status: RouterOutput["availability"]["list"][number]["status"];
+}
+
+export const AvailabilityIcon: FC<Props> = ({ status }) => {
+  switch (status) {
+    case "yes":
+      return <CheckIcon />;
+    case "maybe":
+      return <QuestionMarkIcon />;
+    case "no":
+      return <CloseIcon />;
+  }
+  return <RemoveIcon style={{ fill: "#ccc" }} />;
+};

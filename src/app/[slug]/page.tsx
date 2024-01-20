@@ -77,7 +77,7 @@ export default function Page({
             <div
               key={attendee.id}
               className={cn(
-                "h-full flex flex-col items-center justify-between cursor-pointer py-2 px-5 rounded-t-2xl text-lg",
+                "h-full flex flex-col items-center justify-between cursor-pointer py-2 px-5 rounded-t-2xl leading-7",
                 !isPollEditMode &&
                   selectedAttendee === attendee.id &&
                   "bg-zinc-100",

@@ -8,9 +8,10 @@ import { RouterOutput } from "@/app/_trpc/client";
 
 export interface Props {
   attendee: RouterOutput["attendee"]["list"][number];
+  isPollEditMode: boolean;
 }
 
-export const EditableAttendeeName: FC<Props> = ({ attendee }) => {
+export const AttendeeName: FC<Props> = ({ attendee, isPollEditMode }) => {
   const [name, setName] = useState(attendee.name);
   const [isEditingName, setIsEditingName] = useState(false);
   const { isPending, mutateAsync } = trpc.attendee.update.useMutation();
@@ -40,7 +41,7 @@ export const EditableAttendeeName: FC<Props> = ({ attendee }) => {
 
   return (
     <>
-      {isEditingName ? (
+      {isEditingName && isPollEditMode ? (
         <div className="flex">
           <TextField
             size="small"
@@ -64,7 +65,9 @@ export const EditableAttendeeName: FC<Props> = ({ attendee }) => {
           </IconButton>
         </div>
       ) : (
-        <span onClick={() => setIsEditingName(true)}>{attendee.name}</span>
+        <span onClick={() => isPollEditMode && setIsEditingName(true)}>
+          {attendee.name}
+        </span>
       )}
     </>
   );

@@ -9,9 +9,10 @@ import { RouterOutput, trpc } from "../../_trpc/client";
 
 interface Props {
   poll: RouterOutput["getPoll"];
+  isPollEditMode: boolean;
 }
 
-export const Meta: FC<Props> = ({ poll }) => {
+export const Meta: FC<Props> = ({ poll, isPollEditMode }) => {
   const [isEditingMeta, setIsEditingMeta] = useState(false);
 
   const [meta, setMeta] = useState({
@@ -41,21 +42,23 @@ export const Meta: FC<Props> = ({ poll }) => {
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full">
-      <div>
-        {isEditingMeta ? (
-          <IconButton onClick={submit} disabled={isPending}>
-            {isPending ? (
-              <AutorenewIcon className="animate-spin" />
-            ) : (
-              <CheckIcon />
-            )}
-          </IconButton>
-        ) : (
-          <IconButton onClick={() => setIsEditingMeta(true)}>
-            <EditIcon />
-          </IconButton>
-        )}
-      </div>
+      {isPollEditMode && (
+        <div>
+          {isEditingMeta ? (
+            <IconButton onClick={submit} disabled={isPending}>
+              {isPending ? (
+                <AutorenewIcon className="animate-spin" />
+              ) : (
+                <CheckIcon />
+              )}
+            </IconButton>
+          ) : (
+            <IconButton onClick={() => setIsEditingMeta(true)}>
+              <EditIcon />
+            </IconButton>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-col gap-3 w-full">
         {isEditingMeta ? (
@@ -91,9 +94,11 @@ export const Meta: FC<Props> = ({ poll }) => {
         ) : (
           <>
             <h1 className="text-2xl font-semibold">
-              {poll?.name || "Bez nazwy"}
+              {poll?.name || "Ankieta bez nazwy"}
             </h1>
-            <p className="whitespace-pre-wrap">{poll?.description}</p>
+            <p className="whitespace-pre-wrap">
+              {poll?.description || "Brak opisu"}
+            </p>
           </>
         )}
       </div>

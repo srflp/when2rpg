@@ -61,7 +61,7 @@ export const Meta: FC<Props> = ({ poll, isPollEditMode }) => {
       )}
 
       <div className="flex flex-col gap-3 w-full">
-        {isEditingMeta ? (
+        {isEditingMeta && isPollEditMode ? (
           <>
             <TextField
               label="Nazwa ankiety"
@@ -93,12 +93,12 @@ export const Meta: FC<Props> = ({ poll, isPollEditMode }) => {
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-semibold">
+            <h1 className="text-3xl font-semibold">
               {poll?.name || "Ankieta bez nazwy"}
             </h1>
-            <p className="whitespace-pre-wrap">
-              {poll?.description || "Brak opisu"}
-            </p>
+            {poll?.description && (
+              <p className="whitespace-pre-wrap">{poll?.description}</p>
+            )}
           </>
         )}
       </div>

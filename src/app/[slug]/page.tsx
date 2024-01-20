@@ -67,14 +67,23 @@ export default function Page({
             gridTemplateColumns: `repeat(${(attendees?.length || 0) + 1 + +isPollEditMode}, minmax(min-content,1fr))`,
           }}
         >
-          <div className="self-end py-2 text-lg">Data</div>
+          <div className="self-end py-2 text-lg row-span-2">Data</div>
+          <div className="col-start-2 col-end-[-1] text-lg p-2">Dostępność</div>
           {attendees?.map((attendee) => (
             <div
               key={attendee.id}
               className={cn(
-                "h-full flex flex-col items-center justify-between cursor-pointer py-2 px-5 rounded-t-xl text-lg",
-                selectedAttendee === attendee.id && "bg-zinc-100",
+                "h-full flex flex-col items-center justify-between cursor-pointer py-2 px-5 rounded-t-2xl text-lg",
+                !isPollEditMode &&
+                  selectedAttendee === attendee.id &&
+                  "bg-zinc-100",
               )}
+              onClick={() =>
+                !isPollEditMode &&
+                setSelectedAttendee((currentId) =>
+                  currentId === attendee.id ? "" : attendee.id,
+                )
+              }
             >
               <div className="flex gap-2">
                 {isPollEditMode && <AttendeeDeleteButton attendee={attendee} />}
@@ -101,14 +110,17 @@ export default function Page({
                 <div
                   key={attendee.id}
                   onClick={() =>
+                    !isPollEditMode &&
                     setSelectedAttendee((currentId) =>
                       currentId === attendee.id ? "" : attendee.id,
                     )
                   }
                   className={cn(
                     "cursor-pointer flex flex-col justify-center items-center",
-                    selectedAttendee === attendee.id && "bg-zinc-100",
-                    i === 29 && "rounded-b-xl",
+                    !isPollEditMode &&
+                      selectedAttendee === attendee.id &&
+                      "bg-zinc-100",
+                    i === 29 && "rounded-b-2xl",
                   )}
                 >
                   <AvailabilityIcon status={null} />

@@ -65,7 +65,10 @@ export const AttendeeName: FC<Props> = ({ attendee, isPollEditMode }) => {
           </IconButton>
         </div>
       ) : (
-        <span onClick={() => isPollEditMode && setIsEditingName(true)}>
+        <span
+          className="font-semibold"
+          onClick={() => isPollEditMode && setIsEditingName(true)}
+        >
           {attendee.name}
         </span>
       )}

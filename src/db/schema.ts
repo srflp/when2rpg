@@ -24,7 +24,7 @@ export const polls = pgTable("polls", {
   description: text("description").notNull().default(""),
 });
 
-export const pollsAttendees = pgTable("polls_attendees", {
+export const attendees = pgTable("attendees", {
   id: uuid("id").primaryKey().defaultRandom(),
   pollId: uuid("poll_id")
     .notNull()
@@ -35,7 +35,7 @@ export const pollsAttendees = pgTable("polls_attendees", {
 export const availabilities = pgTable("availabilities", {
   id: uuid("id").primaryKey().defaultRandom(),
   pollId: uuid("poll_id").references(() => polls.id),
-  userId: uuid("user_id").references(() => pollsAttendees.id),
+  userId: uuid("user_id").references(() => attendees.id),
   date: date("date").notNull(),
   description: text("description").notNull().default(""),
   status: availabilityStatusEnum("status"),

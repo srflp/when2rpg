@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { procedure, router } from "./trpc";
-import { polls } from "@/db/schema";
+import { attendees, polls } from "@/db/schema";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
@@ -8,6 +8,9 @@ import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 const insertPollSchema = createInsertSchema(polls);
 const selectPollSchema = createSelectSchema(polls);
+
+const insertAttendeeSchema = createInsertSchema(attendees);
+const selectAttendeeSchema = createSelectSchema(attendees);
 // const smth = insertPollSchema.pick({ slug: true })
 
 export const appRouter = router({
@@ -49,6 +52,28 @@ export const appRouter = router({
       .values({})
       .returning({ slug: polls.slug });
     return poll.slug;
+  }),
+  attendee: router({
+    create: procedure
+      .input(insertAttendeeSchema)
+      .mutation(async ({ input }) => {
+        const [attendee] = await db.insert(attendees).values(input).returning();
+        return attendee;
+      }),
+    list: procedure
+      .input(z.object({ pollId: z.string() }))
+      .query(async ({ input }) => {
+        const attendeeList = await db
+          .select()
+          .from(attendees)
+          .where(eq(attendees.pollId, input.pollId));
+        return attendeeList;
+      }),
+    delete: procedure
+      .input(z.object({ id: z.string() }))
+      .mutation(async ({ input }) => {
+        await db.delete(attendees).where(eq(attendees.id, input.id));
+      }),
   }),
 });
 

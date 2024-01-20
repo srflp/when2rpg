@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from "react";
-import { RouterOutput, trpc } from "../_trpc/client";
+import { RouterOutput, trpc } from "../../_trpc/client";
 
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";

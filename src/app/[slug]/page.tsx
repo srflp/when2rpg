@@ -4,7 +4,7 @@ import { addDays, format } from "date-fns";
 
 import { Meta } from "./_components/Meta";
 import { NewAttendee } from "./_components/NewAttendee";
-import { Attendee } from "./_components/Attendee";
+import { AttendeeHeader } from "./_components/AttendeeHeader";
 
 export default function Page({
   params: { slug },
@@ -30,14 +30,14 @@ export default function Page({
       {poll && <Meta poll={poll} />}
       <table>
         <thead>
-          <tr>
-            <th className="text-left">Data</th>
+          <tr className="*:px-1">
+            <th className="text-left align-bottom">Data</th>
             {attendees?.map((attendee) => (
-              <th key={attendee.id}>
-                <Attendee attendee={attendee} />
+              <th key={attendee.id} className="align-bottom">
+                <AttendeeHeader attendee={attendee} />
               </th>
             ))}
-            <th className="flex gap-1">
+            <th className="align-center">
               {poll && <NewAttendee pollId={poll.id} />}
             </th>
           </tr>

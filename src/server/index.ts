@@ -74,6 +74,16 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         await db.delete(attendees).where(eq(attendees.id, input.id));
       }),
+    update: procedure
+      .input(z.object({ id: z.string(), name: z.string() }))
+      .mutation(async ({ input }) => {
+        const [attendee] = await db
+          .update(attendees)
+          .set({ name: input.name })
+          .where(eq(attendees.id, input.id))
+          .returning();
+        return attendee;
+      }),
   }),
 });
 

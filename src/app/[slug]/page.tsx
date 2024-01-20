@@ -12,7 +12,6 @@ import { Fragment, useEffect, useState } from "react";
 import { AttendeeDeleteButton } from "./_components/AttendeeDeleteButton";
 import { AttendeeName } from "./_components/AttendeeName";
 import { cn } from "@/cn";
-import { AvailabilityPicker } from "./_components/AvailabilityPicker.1";
 
 setDefaultOptions({ locale: pl });
 

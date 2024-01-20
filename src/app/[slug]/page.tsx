@@ -67,8 +67,12 @@ export default function Page({
             gridTemplateColumns: `repeat(${(attendees?.length || 0) + 1 + +isPollEditMode}, minmax(min-content,1fr))`,
           }}
         >
-          <div className="self-end py-2 text-lg row-span-2">Data</div>
-          <div className="col-start-2 col-end-[-1] text-lg p-2">Dostępność</div>
+          <div className="self-end py-2 text-lg row-span-2 font-semibold">
+            Data
+          </div>
+          <div className="col-start-2 col-end-[-1] text-lg p-2 font-semibold">
+            Dostępność
+          </div>
           {attendees?.map((attendee) => (
             <div
               key={attendee.id}

@@ -135,7 +135,7 @@ export default function Page({
                       i === 29 && "rounded-b-2xl",
                     )}
                   >
-                    {selectedAttendee === attendee.id ? (
+                    {selectedAttendee === attendee.id && !isPollEditMode ? (
                       <AvailabilityPicker
                         slug={slug}
                         attendeeId={attendee.id}

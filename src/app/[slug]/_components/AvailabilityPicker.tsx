@@ -65,7 +65,7 @@ export const AvailabilityPicker: FC<Props> = ({
   return (
     <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
       <IconButton
-        className={cn(status === "yes" && "bg-zinc-200")}
+        className={cn(status === "yes" && "!bg-zinc-200")}
         onClick={setAvailabilityStatus("yes")}
         disabled={isPending}
       >
@@ -74,7 +74,7 @@ export const AvailabilityPicker: FC<Props> = ({
         />
       </IconButton>
       <IconButton
-        className={cn(status === "maybe" && "bg-zinc-200")}
+        className={cn(status === "maybe" && "!bg-zinc-200")}
         onClick={setAvailabilityStatus("maybe")}
         disabled={isPending}
       >
@@ -85,7 +85,7 @@ export const AvailabilityPicker: FC<Props> = ({
         />
       </IconButton>
       <IconButton
-        className={cn(status === "no" && "bg-zinc-200")}
+        className={cn(status === "no" && "!bg-zinc-200")}
         onClick={setAvailabilityStatus("no")}
         disabled={isPending}
       >

@@ -4,6 +4,7 @@ import { polls } from "@/db/schema";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 const insertPollSchema = createInsertSchema(polls);
 const selectPollSchema = createSelectSchema(polls);

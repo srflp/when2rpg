@@ -40,7 +40,7 @@ export const Meta: FC<Props> = ({ poll }) => {
   }, [meta, mutateAsync, poll.slug, utils.getPoll]);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full">
       <div>
         {isEditingMeta ? (
           <IconButton onClick={submit} disabled={isPending}>

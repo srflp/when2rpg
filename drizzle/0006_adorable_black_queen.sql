@@ -1,0 +1,1 @@
+ALTER TABLE "availabilities" ADD CONSTRAINT "availabilities_date_attendee_id_unique" UNIQUE("date","attendee_id");

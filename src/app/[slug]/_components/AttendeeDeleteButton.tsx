@@ -7,20 +7,40 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Button from "@mui/material/Button";
-import { RouterOutput, trpc } from "@/app/_trpc/client";
+import { trpc } from "@/app/_trpc/client";
 
 interface Props {
-  attendee: RouterOutput["attendee"]["list"][number];
+  slug: string;
+  attendeeId: string;
+  attendeeName: string;
 }
 
-export const AttendeeDeleteButton: FC<Props> = ({ attendee }) => {
+export const AttendeeDeleteButton: FC<Props> = ({
+  slug,
+  attendeeId,
+  attendeeName,
+}) => {
   const { mutateAsync, isPending } = trpc.attendee.delete.useMutation();
   const utils = trpc.useUtils();
   const delete_ = useCallback(async () => {
     handleClose();
-    await mutateAsync({ id: attendee.id });
-    utils.attendee.list.invalidate({ pollId: attendee.pollId });
-  }, [attendee.id, attendee.pollId, mutateAsync, utils.attendee.list]);
+    await mutateAsync(
+      { id: attendeeId },
+      {
+        onSuccess: () => {
+          utils.poll.get.setData({ slug }, (old) => {
+            if (!old) return old;
+            return {
+              ...old,
+              attendees: old.attendees.filter(
+                (attendee) => attendee.id !== attendeeId,
+              ),
+            };
+          });
+        },
+      },
+    );
+  }, [attendeeId, mutateAsync, slug, utils.poll.get]);
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -44,7 +64,7 @@ export const AttendeeDeleteButton: FC<Props> = ({ attendee }) => {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Czy na pewno chcesz usunąć uczestnika {attendee.name}?
+            Czy na pewno chcesz usunąć uczestnika {attendeeName}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

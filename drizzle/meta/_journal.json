@@ -36,6 +36,20 @@
       "when": 1705766744764,
       "tag": "0004_nice_pestilence",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1705780225555,
+      "tag": "0005_wild_killraven",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1705782681553,
+      "tag": "0006_adorable_black_queen",
+      "breakpoints": true
     }
   ]
 }

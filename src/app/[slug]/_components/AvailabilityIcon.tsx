@@ -6,6 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 interface Props {
+  // @ts-expect-error
   status: RouterOutput["availability"]["list"][number]["status"];
 }
 

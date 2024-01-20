@@ -12,6 +12,7 @@ import { Fragment, useEffect, useState } from "react";
 import { AttendeeDeleteButton } from "./_components/AttendeeDeleteButton";
 import { AttendeeName } from "./_components/AttendeeName";
 import { cn } from "@/cn";
+import { AvailabilityPicker } from "./_components/AvailabilityPicker.1";
 
 setDefaultOptions({ locale: pl });
 
@@ -20,11 +21,8 @@ export default function Page({
 }: {
   params: { slug: string };
 }) {
-  const { data: poll } = trpc.getPoll.useQuery({ slug });
-  const { data: attendees } = trpc.attendee.list.useQuery(
-    { pollId: poll?.id! },
-    { enabled: !!poll },
-  );
+  const { data: poll } = trpc.poll.get.useQuery({ slug });
+  console.log(poll);
 
   const today = new Date();
   const next30Days = Array.from({ length: 30 }, (v, i) => {
@@ -36,8 +34,8 @@ export default function Page({
   });
   const [isPollEditMode, setIsPollEditMode] = useState(false);
   useEffect(() => {
-    if (attendees && attendees.length === 0) setIsPollEditMode(true);
-  }, [attendees]);
+    if (poll && poll.attendees.length === 0) setIsPollEditMode(true);
+  }, [poll]);
 
   const [selectedAttendee, setSelectedAttendee] = useState("");
 
@@ -57,14 +55,14 @@ export default function Page({
           />
         }
         label="Tryb zarządzania ankietą"
-        disabled={attendees?.length === 0}
+        disabled={poll?.attendees?.length === 0}
       />
 
       <div className="overflow-x-auto w-full">
         <div
           className="grid text-center"
           style={{
-            gridTemplateColumns: `repeat(${(attendees?.length || 0) + 1 + +isPollEditMode}, minmax(min-content,1fr))`,
+            gridTemplateColumns: `repeat(${(poll?.attendees.length || 0) + 1 + +isPollEditMode}, minmax(min-content,1fr))`,
           }}
         >
           <div className="self-end py-2 text-lg row-span-2 font-semibold">
@@ -73,7 +71,7 @@ export default function Page({
           <div className="col-start-2 col-end-[-1] text-lg p-2 font-semibold">
             Dostępność
           </div>
-          {attendees?.map((attendee) => (
+          {poll?.attendees.map((attendee) => (
             <div
               key={attendee.id}
               className={cn(
@@ -90,17 +88,25 @@ export default function Page({
               }
             >
               <div className="flex gap-2">
-                {isPollEditMode && <AttendeeDeleteButton attendee={attendee} />}
+                {isPollEditMode && (
+                  <AttendeeDeleteButton
+                    slug={slug}
+                    attendeeId={attendee.id}
+                    attendeeName={attendee.name}
+                  />
+                )}
               </div>
               <AttendeeName
-                attendee={attendee}
+                slug={slug}
+                attendeeId={attendee.id}
+                attendeeName={attendee.name}
                 isPollEditMode={isPollEditMode}
               />
             </div>
           ))}
           {poll && isPollEditMode && (
             <div className="self-end min-w-52 flex p-2">
-              <NewAttendee pollId={poll.id} />
+              <NewAttendee slug={slug} pollId={poll.id} />
             </div>
           )}
           {next30Days.map(({ date, weekday }, i) => (
@@ -110,7 +116,7 @@ export default function Page({
                 <br />
                 {date}
               </div>
-              {attendees?.map((attendee) => (
+              {poll?.attendees.map((attendee) => (
                 <div
                   key={attendee.id}
                   onClick={() =>
@@ -127,7 +133,11 @@ export default function Page({
                     i === 29 && "rounded-b-2xl",
                   )}
                 >
-                  <AvailabilityIcon status={null} />
+                  {selectedAttendee === attendee.id ? (
+                    <AvailabilityPicker />
+                  ) : (
+                    <AvailabilityIcon status="yes" />
+                  )}
                 </div>
               ))}
               {poll && isPollEditMode && <div></div>}

@@ -8,7 +8,7 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { RouterOutput, trpc } from "../../_trpc/client";
 
 interface Props {
-  poll: RouterOutput["getPoll"];
+  poll: Exclude<Exclude<RouterOutput["poll"], undefined>["get"], undefined>;
   isPollEditMode: boolean;
 }
 
@@ -19,7 +19,7 @@ export const Meta: FC<Props> = ({ poll, isPollEditMode }) => {
     name: poll.name,
     description: poll.description,
   });
-  const { mutateAsync, isPending } = trpc.updatePollMetadata.useMutation();
+  const { mutateAsync, isPending } = trpc.poll.updateMetadata.useMutation();
   const utils = trpc.useUtils();
 
   const submit = useCallback(async () => {
@@ -31,14 +31,17 @@ export const Meta: FC<Props> = ({ poll, isPollEditMode }) => {
       {
         onSuccess() {
           setIsEditingMeta(false);
-          utils.getPoll.setData({ slug: poll.slug }, (old) => ({
-            ...old!,
-            ...meta,
-          }));
+          utils.poll.get.setData({ slug: poll.slug }, (old) => {
+            if (!old) return old;
+            return {
+              ...old,
+              ...meta,
+            };
+          });
         },
       },
     );
-  }, [meta, mutateAsync, poll.slug, utils.getPoll]);
+  }, [meta, mutateAsync, poll.slug, utils.poll.get]);
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full">

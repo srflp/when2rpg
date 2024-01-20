@@ -1,10 +1,13 @@
 "use client";
+import { useTransition } from "react";
 import { trpc } from "./_trpc/client";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const createPoll = trpc.createPoll.useMutation();
+  const { isPending, mutateAsync } = trpc.poll.create.useMutation();
   const router = useRouter();
+  const [isPendingTransition, startTransition] = useTransition();
+  const isLoading = isPending || isPendingTransition;
   return (
     <main className="flex flex-col items-center justify-center gap-10 py-12 md:p-12 h-full max-w-screen-md mx-auto px-6">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -38,13 +41,15 @@ export default function Home() {
       <button
         className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 px-8 bg-amber-700 text-white"
         onClick={async () => {
-          const pollId = await createPoll.mutateAsync();
-          if (pollId === null) return;
-          router.push(pollId);
+          await mutateAsync(undefined, {
+            onSuccess: (slug) => {
+              startTransition(() => router.push(slug));
+            },
+          });
         }}
-        disabled={createPoll.isPending}
+        disabled={isLoading}
       >
-        {createPoll.isPending && (
+        {isLoading && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,7 +65,7 @@ export default function Home() {
             />
           </svg>
         )}
-        {createPoll.isPending ? "Tworzenie..." : "Stwórz ankietę"}
+        {isLoading ? "Tworzenie..." : "Stwórz ankietę"}
       </button>
     </main>
   );

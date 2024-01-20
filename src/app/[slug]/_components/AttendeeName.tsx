@@ -4,45 +4,60 @@ import { FC, useCallback, useState } from "react";
 import { trpc } from "@/app/_trpc/client";
 import IconButton from "@mui/material/IconButton";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import { RouterOutput } from "@/app/_trpc/client";
 
 export interface Props {
-  attendee: RouterOutput["attendee"]["list"][number];
+  slug: string;
+  attendeeId: string;
+  attendeeName: string;
   isPollEditMode: boolean;
 }
 
-export const AttendeeName: FC<Props> = ({ attendee, isPollEditMode }) => {
-  const [name, setName] = useState(attendee.name);
+export const AttendeeName: FC<Props> = ({
+  slug,
+  attendeeId,
+  attendeeName,
+  isPollEditMode,
+}) => {
+  const [name, setName] = useState(attendeeName);
   const [isEditingName, setIsEditingName] = useState(false);
   const { isPending, mutateAsync } = trpc.attendee.update.useMutation();
   const utils = trpc.useUtils();
 
   const submit = useCallback(async () => {
-    await mutateAsync({
-      id: attendee.id,
-      name,
-    });
-    utils.attendee.list.setData({ pollId: attendee.pollId }, (old) => {
-      if (!old) {
-        return old;
-      }
-      return old.map((oldAttendee) => {
-        if (oldAttendee.id === attendee.id) {
-          return {
-            ...attendee,
-            name,
-          };
-        }
-        return oldAttendee;
-      });
-    });
+    await mutateAsync(
+      {
+        id: attendeeId,
+        name,
+      },
+      {
+        onSuccess() {
+          utils.poll.get.setData({ slug }, (old) => {
+            if (!old) {
+              return old;
+            }
+            return {
+              ...old,
+              attendees: old.attendees.map((oldAttendee) => {
+                if (oldAttendee.id === attendeeId) {
+                  return {
+                    ...oldAttendee,
+                    name,
+                  };
+                }
+                return oldAttendee;
+              }),
+            };
+          });
+        },
+      },
+    );
     setIsEditingName(false);
-  }, [attendee, mutateAsync, name, utils.attendee.list]);
+  }, [attendeeId, mutateAsync, name, slug, utils.poll.get]);
 
   return (
     <>
       {isEditingName && isPollEditMode ? (
-        <div className="flex">
+        <div className="flex min-w-52">
           <TextField
             size="small"
             label="Imię uczestnika"
@@ -66,7 +81,7 @@ export const AttendeeName: FC<Props> = ({ attendee, isPollEditMode }) => {
         </div>
       ) : (
         <span onClick={() => isPollEditMode && setIsEditingName(true)}>
-          {attendee.name}
+          {attendeeName}
         </span>
       )}
     </>

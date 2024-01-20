@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { procedure, router } from "./trpc";
 import { attendees, polls } from "@/db/schema";
 import { z } from "zod";
-import { eq, and, between } from "drizzle-orm";
+import { eq, and, between, gt, gte, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
@@ -13,63 +13,68 @@ const selectPollSchema = createSelectSchema(polls);
 
 const insertAttendeeSchema = createInsertSchema(attendees);
 const selectAttendeeSchema = createSelectSchema(attendees);
+
 // const smth = insertPollSchema.pick({ slug: true })
 
 export const appRouter = router({
-  getPoll: procedure
-    .input(
-      z.object({
-        slug: z.string(),
-      }),
-    )
-    .query(async ({ input }) => {
+  poll: router({
+    create: procedure.mutation(async () => {
       const [poll] = await db
-        .select()
-        .from(polls)
-        .where(eq(polls.slug, input.slug));
-      return poll;
+        .insert(polls)
+        .values({})
+        .returning({ slug: polls.slug });
+      return poll.slug;
     }),
-  updatePollMetadata: procedure
-    .input(
-      z.object({
-        slug: z.string(),
-        name: z.string(),
-        description: z.string(),
+    get: procedure
+      .input(
+        z.object({
+          slug: z.string(),
+        }),
+      )
+      .query(
+        async ({ input }) =>
+          await db.query.polls.findFirst({
+            where: eq(polls.slug, input.slug),
+            with: {
+              attendees: {
+                columns: {
+                  pollId: false,
+                },
+                with: {
+                  availabilities: {
+                    where: gte(availabilities.date, sql`CURRENT_DATE`),
+                  },
+                },
+              },
+            },
+          }),
+      ),
+    updateMetadata: procedure
+      .input(
+        z.object({
+          slug: z.string(),
+          name: z.string(),
+          description: z.string(),
+        }),
+      )
+      .mutation(async ({ input: { slug, ...rest } }) => {
+        const [poll] = await db
+          .update(polls)
+          .set(rest)
+          .where(eq(polls.slug, slug))
+          .returning({
+            name: polls.name,
+            description: polls.description,
+          });
+        return poll;
       }),
-    )
-    .mutation(async ({ input: { slug, ...rest } }) => {
-      const [poll] = await db
-        .update(polls)
-        .set(rest)
-        .where(eq(polls.slug, slug))
-        .returning({
-          name: polls.name,
-          description: polls.description,
-        });
-      return poll;
-    }),
-  createPoll: procedure.mutation(async () => {
-    const [poll] = await db
-      .insert(polls)
-      .values({})
-      .returning({ slug: polls.slug });
-    return poll.slug;
   }),
   attendee: router({
     create: procedure
       .input(insertAttendeeSchema)
       .mutation(async ({ input }) => {
         const [attendee] = await db.insert(attendees).values(input).returning();
-        return attendee;
-      }),
-    list: procedure
-      .input(z.object({ pollId: z.string() }))
-      .query(async ({ input }) => {
-        const attendeeList = await db
-          .select()
-          .from(attendees)
-          .where(eq(attendees.pollId, input.pollId));
-        return attendeeList;
+        return attendee.id;
       }),
     delete: procedure
       .input(z.object({ id: z.string() }))
@@ -88,22 +93,37 @@ export const appRouter = router({
       }),
   }),
   availability: router({
-    list: procedure
-      .input(z.object({ pollId: z.string() }))
-      .query(async ({ input }) => {
-        const toPostgresDate = (date: Date) => format(date, "yyyy-MM-dd");
-        const todayDate = new Date();
-        const today = toPostgresDate(todayDate);
-        const dateIn30Days = toPostgresDate(addDays(todayDate, 30));
-        return await db
-          .select()
-          .from(availabilities)
-          .where(
-            and(
-              eq(availabilities.pollId, input.pollId),
-              between(availabilities.date, today, dateIn30Days),
-            ),
-          );
+    // list: procedure
+    //   .input(z.object({ pollId: z.string() }))
+    //   .query(async ({ input }) => {
+    //     const toPostgresDate = (date: Date) => format(date, "yyyy-MM-dd");
+    //     const todayDate = new Date();
+    //     const today = toPostgresDate(todayDate);
+    //     const dateIn30Days = toPostgresDate(addDays(todayDate, 30));
+    //     return await db
+    //       .select()
+    //       .from(availabilities)
+    //       .where(
+    //         and(
+    //           eq(availabilities.pollId, input.pollId),
+    //           between(availabilities.date, today, dateIn30Days),
+    //         ),
+    //       );
+    //   }),
+    set: procedure
+      .input(
+        z.object({
+          date: z.string(),
+          attendeeId: z.string(),
+          availability: z.enum(["yes", "no", "maybe"]),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const [availability] = await db
+          .insert(availabilities)
+          .values(input)
+          .returning();
+        return availability;
       }),
   }),
 });

@@ -5,13 +5,13 @@ import { Meta } from "./_components/Meta";
 import { NewAttendee } from "./_components/NewAttendee";
 import { AvailabilityIcon } from "./_components/AvailabilityIcon";
 import { pl } from "date-fns/locale";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { Fragment, useEffect, useState } from "react";
 import { AttendeeDeleteButton } from "./_components/AttendeeDeleteButton";
 import { AttendeeName } from "./_components/AttendeeName";
 import { cn } from "@/cn";
 import { AvailabilityPicker } from "./_components/AvailabilityPicker";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
 
 setDefaultOptions({ locale: pl });
 
@@ -44,17 +44,18 @@ export default function Page({
         <img src="/logo.svg" alt="logo" width="340" className="pb-4" />
       </div>
       {poll && <Meta poll={poll} isPollEditMode={isPollEditMode} />}
-      <FormControlLabel
-        checked={isPollEditMode}
-        control={
-          <Switch
-            size="small"
-            onChange={(e) => setIsPollEditMode(e.target.checked)}
-          />
-        }
-        label="Tryb zarządzania ankietą"
+      <ToggleButtonGroup
+        color="primary"
+        value={isPollEditMode}
+        exclusive
+        onChange={(_, value) => {
+          if (value !== null) return setIsPollEditMode(value);
+        }}
         disabled={poll?.attendees?.length === 0}
-      />
+      >
+        <ToggleButton value={false}>Głosowanie</ToggleButton>
+        <ToggleButton value={true}>Edycja</ToggleButton>
+      </ToggleButtonGroup>
 
       <div className="overflow-x-auto w-full">
         <div

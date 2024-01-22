@@ -4,18 +4,13 @@ import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { trpc } from "./client";
-
-function getBaseUrl() {
-  if (typeof window !== "undefined") return "";
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return `http://localhost:${process.env.PORT ?? 3000}`;
-}
+import { getApiUrl } from "./url";
 
 export default function Provider({ children }: PropsWithChildren<{}>) {
   const [queryClient] = useState(() => new QueryClient({}));
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links: [httpBatchLink({ url: `${getBaseUrl()}/api/trpc` })],
+      links: [httpBatchLink({ url: getApiUrl() })],
     }),
   );
   return (

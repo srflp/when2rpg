@@ -2,7 +2,6 @@ import { FC, useCallback } from "react";
 import { AvailabilityIcon } from "./AvailabilityIcon";
 import IconButton from "@mui/material/IconButton";
 import { trpc } from "@/app/_trpc/client";
-import { cn } from "@/cn";
 
 interface Props {
   slug: string;
@@ -65,32 +64,32 @@ export const AvailabilityPicker: FC<Props> = ({
   return (
     <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
       <IconButton
-        className={cn(status === "yes" && "!bg-zinc-200")}
         onClick={setAvailabilityStatus("yes")}
-        disabled={isPending}
+        disabled={isPending || status === "yes"}
       >
         <AvailabilityIcon
           status={isPending && variables.status === "yes" ? "loading" : "yes"}
+          active={status === "yes"}
         />
       </IconButton>
       <IconButton
-        className={cn(status === "maybe" && "!bg-zinc-200")}
         onClick={setAvailabilityStatus("maybe")}
-        disabled={isPending}
+        disabled={isPending || status === "maybe"}
       >
         <AvailabilityIcon
           status={
             isPending && variables.status === "maybe" ? "loading" : "maybe"
           }
+          active={status === "maybe"}
         />
       </IconButton>
       <IconButton
-        className={cn(status === "no" && "!bg-zinc-200")}
         onClick={setAvailabilityStatus("no")}
-        disabled={isPending}
+        disabled={isPending || status === "no"}
       >
         <AvailabilityIcon
           status={isPending && variables.status === "no" ? "loading" : "no"}
+          active={status === "no"}
         />
       </IconButton>
     </div>

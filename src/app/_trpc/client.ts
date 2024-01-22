@@ -1,4 +1,4 @@
-import { AppRouter } from "@/server";
+import { AppRouter } from "@/server/trpc";
 import { createTRPCReact } from "@trpc/react-query";
 import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 

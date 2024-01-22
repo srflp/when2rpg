@@ -12,7 +12,7 @@ import { cn } from "@/cn";
 import { AvailabilityPicker } from "./AvailabilityPicker";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
-import { serverClient } from "@/app/_trpc/serverClient";
+import { serverClient } from "@/server/trpc";
 
 setDefaultOptions({ locale: pl });
 

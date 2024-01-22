@@ -4,7 +4,7 @@ import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { trpc } from "./client";
-import { getApiUrl } from "./url";
+import { getApiUrl } from "../../server/url";
 
 export default function Provider({ children }: PropsWithChildren<{}>) {
   const [queryClient] = useState(() => new QueryClient({}));

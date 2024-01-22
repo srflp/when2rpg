@@ -1,4 +1,4 @@
-import { serverClient } from "../_trpc/serverClient";
+import { serverClient } from "@/server/trpc";
 import { Poll } from "./_components/Poll";
 
 export default async function Page({

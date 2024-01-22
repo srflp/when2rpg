@@ -97,9 +97,9 @@ export function Poll({
           <div className="col-start-2 col-end-[-2] text-lg p-2 font-semibold">
             Dostępność
           </div>
-          <div className="text-lg p-2 font-semibold">
+          {!!poll?.attendees.length && <div className="text-lg p-2 font-semibold">
             {isPollEditMode ? "" : "Podsumowanie"}
-          </div>
+          </div>}
           {poll?.attendees.map((attendee) => (
             <div
               key={attendee.id}

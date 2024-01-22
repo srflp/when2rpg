@@ -5,7 +5,7 @@ import { Meta } from "./Meta";
 import { NewAttendee } from "./NewAttendee";
 import { AvailabilityIcon } from "./AvailabilityIcon";
 import { pl } from "date-fns/locale";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { AttendeeDeleteButton } from "./AttendeeDeleteButton";
 import { AttendeeName } from "./AttendeeName";
 import { cn } from "@/cn";
@@ -39,6 +39,22 @@ export function Poll({
       weekday: format(date, "EEEE"),
     };
   });
+  const stats = useMemo(() => {
+    const stats: Record<string, Record<string, number>> = {};
+    for (const { date } of next30Days) {
+      stats[date] = {};
+      for (const status of ["yes", "maybe"]) {
+        stats[date][status] = 0;
+      }
+    }
+    for (const attendee of poll?.attendees || []) {
+      for (const availability of attendee.availabilities) {
+        if (availability.status === "no") continue;
+        stats[availability.date][availability.status]++;
+      }
+    }
+    return stats;
+  }, [poll, next30Days]);
   const [isPollEditMode, setIsPollEditMode] = useState(false);
   useEffect(() => {
     if (poll && poll.attendees.length === 0) setIsPollEditMode(true);
@@ -72,14 +88,17 @@ export function Poll({
         <div
           className="grid text-center overflow-x-auto"
           style={{
-            gridTemplateColumns: `repeat(${(poll?.attendees.length || 0) + 1 + +isPollEditMode}, 1fr)`,
+            gridTemplateColumns: `repeat(${(poll?.attendees.length || 0) + 2}, 1fr)`,
           }}
         >
           <div className="self-end h-full py-2 text-lg row-span-2 font-semibold sticky left-0 bg-white z-10 grid content-end">
             Data
           </div>
-          <div className="col-start-2 col-end-[-1] text-lg p-2 font-semibold">
+          <div className="col-start-2 col-end-[-2] text-lg p-2 font-semibold">
             Dostępność
+          </div>
+          <div className="text-lg p-2 font-semibold">
+            {isPollEditMode ? "" : "Podsumowanie"}
           </div>
           {poll?.attendees.map((attendee) => (
             <div
@@ -114,10 +133,12 @@ export function Poll({
               />
             </div>
           ))}
-          {poll && isPollEditMode && (
+          {poll && isPollEditMode ? (
             <div className="self-end min-w-52 flex p-2">
               <NewAttendee slug={slug} pollId={poll.id} />
             </div>
+          ) : (
+            <div></div>
           )}
           {next30Days.map(({ date, dateFormatted, weekday }, i) => (
             <Fragment key={date}>
@@ -160,7 +181,26 @@ export function Poll({
                   </div>
                 );
               })}
-              {poll && isPollEditMode && <div></div>}
+              {isPollEditMode ? (
+                <div></div>
+              ) : (
+                <div className="flex items-center justify-center gap-3">
+                  {!!stats[date]["yes"] && (
+                    <span>
+                      {stats[date]["yes"]}
+                      {"x "}
+                      <AvailabilityIcon status="yes" active />
+                    </span>
+                  )}
+                  {!!stats[date]["maybe"] && (
+                    <span>
+                      {stats[date]["maybe"]}
+                      {"x "}
+                      <AvailabilityIcon status="maybe" active />
+                    </span>
+                  )}
+                </div>
+              )}
             </Fragment>
           ))}
         </div>
